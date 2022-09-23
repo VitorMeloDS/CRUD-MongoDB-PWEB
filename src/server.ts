@@ -12,4 +12,7 @@ app.use(cors());
 app.use(routeController);
 
 
-app.listen(3000);
+app.listen(process.env.PORT || 8086, () => {
+    console.clear()
+    console.log("Server stared in localhost:8086")
+});
