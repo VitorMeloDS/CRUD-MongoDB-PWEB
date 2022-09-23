@@ -11,7 +11,5 @@ app.use(cors());
 
 app.use(routeController);
 
-app.listen(8086, () => {
-    console.clear();
-    console.log('Server started in localhost:8086 🚀');
-})
+
+app.listen(3000);
