@@ -1,17 +1,19 @@
 import { Request, Response, Router } from "express";
+import { BookController } from "../controller/bookController";
 
 const router: Router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-    res.status(200).send({ message: 'rota get' })
+router.get('/search-books', (req: Request, res: Response) => {
+    const books = new BookController();
+    books.getBooks(req, res);
 });
-router.post('/', (req: Request, res: Response) => {
+router.post('/create-books', (req: Request, res: Response) => {
     res.status(200).send({ message: 'rota post' })
 });
-router.delete('/', (req: Request, res: Response) => {
+router.delete('/delete-books', (req: Request, res: Response) => {
     res.status(200).send({ message: 'rota delete' })
 });
-router.put('/', (req: Request, res: Response) => {
+router.put('/update-books', (req: Request, res: Response) => {
     res.status(200).send({ message: 'rota put' })
 });
 
