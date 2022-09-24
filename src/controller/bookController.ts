@@ -1,8 +1,7 @@
-import { count } from 'console';
 import { Request, Response } from 'express';
 import fs from 'fs';
-import { isTemplateExpression } from 'typescript';
 import { Books } from '../interface/books';
+import { Message } from '../interface/message';
 
 export class BookController {
   public async getBook(req: Request, res: Response): Promise<any> {
@@ -35,7 +34,7 @@ export class BookController {
 
   public async existBook(req: Request, res: Response): Promise<any> {
     let books: any = '';
-    let result: any;
+    let result: Message;
     let erro: string = '';
 
     try {
@@ -55,13 +54,13 @@ export class BookController {
       console.log(erro);
     }
 
-    return erro ? res.status(404).send(erro) : res.status(200).send(result);
+    return erro ? res.status(404).send(erro) : res.status(200).send(result!);
   }
 
   public async postBook(req: Request, res: Response): Promise<any> {
     let books: any;
     let arrayBooks: any = [];
-    let result: any;
+    let result: Message;
     let erro: string = '';
 
     try {
@@ -84,7 +83,7 @@ export class BookController {
 
   public async deleteBook(req: Request, res: Response): Promise<any> {
     let books: any = '';
-    let result: any;
+    let result: Message;
     let erro: string = '';
     let index: number = 0;
 
@@ -109,13 +108,13 @@ export class BookController {
       console.log(erro);
     }
 
-    return erro ? res.status(404).send(erro) : res.status(200).send(result);
+    return erro ? res.status(404).send(erro) : res.status(200).send(result!);
   }
 
   public async updateBook(req: Request, res: Response) {
     let books: any;
     let arrayBooks: any = [];
-    let result: any;
+    let result: Message;
     let erro: string = '';
 
     try {
@@ -149,13 +148,12 @@ export class BookController {
   
   public async countBook(req: Request, res: Response): Promise<any> {
     let books: any;
-    let result: string;
+    let result: Message;
     let erro: string = '';
 
     try {
       books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
-
-      result = `Existem ${books.length} livros cadastrados`;
+      result = { message: `Existem ${books.length} livros cadastrados` };
       console.log(result);
       
     } catch (e: any) {
