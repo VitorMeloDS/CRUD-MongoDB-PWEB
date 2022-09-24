@@ -14,7 +14,7 @@ router.get('/exist-book', (req: Request, res: Response) => {
     books.existBook(req, res);
 });
 
-// * 
+// * create book
 router.post('/create-book', (req: Request, res: Response) => {
     books.postBook(req, res);
 });

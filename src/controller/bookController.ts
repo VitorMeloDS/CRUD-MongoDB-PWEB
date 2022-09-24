@@ -60,21 +60,21 @@ export class BookController {
 
   public async postBook(req: Request, res: Response): Promise<any> {
     let books: any;
-    let arrayBooks: any[] = [];
-    let result: Books;
+    let arrayBooks: any = [];
+    let result: string;
     let erro: string = '';
 
     try {
-      arrayBooks?.push(req.body)
-      console.log(arrayBooks)
-      books = 
-
-      books = fs.writeFileSync('books.json', Buffer.from(arrayBooks), 'utf8' );
-
-      console.log(books);
-
-      // result = req.body;
-
+      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
+      for (const book of books) {
+        console.log(book);
+        arrayBooks.push(book);
+      }
+      for (const requisicao of req.body) {
+        arrayBooks.push(requisicao);
+      }
+      fs.writeFileSync('books.json', JSON.stringify(arrayBooks), 'utf8');
+      result = 'Livro adicionado com sucesso!';
     } catch (e: any) {
       erro = e.message;
       console.log(erro);
@@ -117,8 +117,6 @@ export class BookController {
 
     return erro ? res.status(404).send(erro) : res.status(200).send(result);
   }
-
-
   
 }
 
