@@ -35,7 +35,7 @@ export class BookController {
 
   public async existBook(req: Request, res: Response): Promise<any> {
     let books: any = '';
-    let result: string = '';
+    let result: any;
     let erro: string = '';
 
     try {
@@ -43,10 +43,10 @@ export class BookController {
 
       for (const item of books) {
         if (item.id == Number(req.query.id)) {
-          result = `O livro número ${req.query.id} existe`
+          result = { message: `O livro número ${req.query.id} existe`};
           break
         } else {
-          result = `O livro número ${req.query.id} não existe`
+          result = { message: `O livro número ${req.query.id} não existe`};
         }  
       }
      
@@ -61,7 +61,7 @@ export class BookController {
   public async postBook(req: Request, res: Response): Promise<any> {
     let books: any;
     let arrayBooks: any = [];
-    let result: string;
+    let result: any;
     let erro: string = '';
 
     try {
@@ -73,7 +73,7 @@ export class BookController {
         arrayBooks.push(requisicao);
       }
       fs.writeFileSync('books.json', JSON.stringify(arrayBooks), 'utf8');
-      result = 'Livro adicionado com sucesso!';
+      result = { message: `Livro adicionado com sucesso!` };
     } catch (e: any) {
       erro = e.message;
       console.log(erro);
@@ -84,7 +84,7 @@ export class BookController {
 
   public async deleteBook(req: Request, res: Response): Promise<any> {
     let books: any = '';
-    let result: string = '';
+    let result: any;
     let erro: string = '';
     let index: number = 0;
 
@@ -94,10 +94,10 @@ export class BookController {
       for (const item of books) {
         if (item.id == Number(req.query.id)) {
           books = this.removeItem(books, 'id', Number(req.query.id))
-          result = `O livro ${req.query.id} foi removido`
+          result = { message: `O livro ${req.query.id} foi removido` }
           break
         } else {
-          result = `O livro ${req.query.id} não foi encontrado`
+          result = { message: `O livro ${req.query.id} não foi encontrado` }
         }
         index++
       }
@@ -115,9 +115,8 @@ export class BookController {
   public async updateBook(req: Request, res: Response) {
     let books: any;
     let arrayBooks: any = [];
-    let result: string;
+    let result: any;
     let erro: string = '';
-    let index = 0;
 
     try {
       books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
@@ -136,11 +135,10 @@ export class BookController {
           item.ano_lancamento = req.body.ano_lancamento
           break;
         }
-        index++;
       }
 
       fs.writeFileSync('books.json', JSON.stringify(arrayBooks), 'utf8');
-      result = 'Livro atualizado com sucesso!';
+      result = { message: 'Livro atualizado com sucesso!' };
     } catch (e: any) {
       erro = e.message;
       console.log(erro);
