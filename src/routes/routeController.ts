@@ -26,7 +26,7 @@ router.delete('/delete-book', (req: Request, res: Response) => {
 
 // * 
 router.put('/update-book', (req: Request, res: Response) => {
-    res.status(200).send({ message: 'rota put' })
+    books.updateBook(req, res);
 });
 
 
