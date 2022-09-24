@@ -24,6 +24,11 @@ router.delete('/delete-book', (req: Request, res: Response) => {
     books.deleteBook(req, res);
 });
 
+// * count book
+router.get('/count-book', (req: Request, res: Response) => {
+    books.countBook(req, res);
+});
+
 // * 
 router.put('/update-book', (req: Request, res: Response) => {
     books.updateBook(req, res);

@@ -149,6 +149,24 @@ export class BookController {
     return erro ? res.status(404).send(erro) : res.status(201).send(result!);
   }
   
+  public async countBook(req: Request, res: Response): Promise<any> {
+    let books: any;
+    let result: string;
+    let erro: string = '';
+
+    try {
+      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
+
+      result = `Existem ${books.length} livros cadastrados`;
+      console.log(result);
+      
+    } catch (e: any) {
+      erro = e.message;
+      console.log(erro);
+    }
+
+    return erro ? res.status(404).send(erro) : res.status(200).send(result!);
+  }
 
   private removeItem = (array: any[], key: string , value: Number) => {
     return array.filter((elemento) => {
