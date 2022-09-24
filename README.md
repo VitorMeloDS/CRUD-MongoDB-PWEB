@@ -12,4 +12,4 @@ A aplicação está rodando no servidor web do heroku no host `https://rocky-woo
 
 ### Referências
 
-Desenvolvido por Vitor e Denison.
+Desenvolvido por @VitorMeloDs e @denisonloc.
