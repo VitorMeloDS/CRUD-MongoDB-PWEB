@@ -24,20 +24,20 @@ export class BookController {
   }
 
   public async existBook(req: Request, res: Response): Promise<any> {
-    let books: any = '';
+    let consulta: any;
     let result: Message;
     let erro: string = '';
 
     try {
-      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
-
-      for (const item of books) {
-        if (item.id == Number(req.query.id)) {
+      if (req.query.id == undefined) {
+        result = { message: 'Não foi passado o id do livro'};
+      } else {
+        consulta = await BookModel.find({id: req.query.id});
+        if (consulta.length > 0) {
           result = { message: `O livro número ${req.query.id} existe`};
-          break
         } else {
           result = { message: `O livro número ${req.query.id} não existe`};
-        }  
+        }
       }
      
     } catch (e: any) {
@@ -49,7 +49,7 @@ export class BookController {
   }
 
   public async postBook(req: Request, res: Response): Promise<any> {
-    let result: any;
+    let result: Message;
     let erro: any;
 
     try {
@@ -59,7 +59,7 @@ export class BookController {
         autor: req.body.autor,
         isbn: req.body.isbn,
         resumo: req.body.resumo,
-        ano_lancamento: req.body.ano_lancamento,
+        ano_lancamento: req.body.ano_lancamento
       });
       
       result = { message: `Livro adicionado com sucesso!` }; 
@@ -98,7 +98,12 @@ export class BookController {
     let erro: any;
 
     try {
-      await BookModel.findByIdAndUpdate(req.body.id, {$set: req.body});
+      let { _id } = req.body;
+      await BookModel.findByIdAndUpdate(
+      _id,
+      {
+        $set: req.body
+      });
       result = { message: 'Livro atualizado com sucesso!' };
     } catch (e: any) {
       erro = { message: e.message };
