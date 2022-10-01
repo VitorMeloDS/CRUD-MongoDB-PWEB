@@ -5,7 +5,7 @@ const router: Router = Router();
 const books = new BookController();
 
 // * findById & findAll
-router.get('/search-book', (req: Request, res: Response) => {
+router.get('/book', (req: Request, res: Response) => {
     books.getBook(req, res);
 });
 
@@ -15,12 +15,12 @@ router.get('/exist-book', (req: Request, res: Response) => {
 });
 
 // * create book
-router.post('/create-book', (req: Request, res: Response) => {
+router.post('/book', (req: Request, res: Response) => {
     books.postBook(req, res);
 });
 
 // * del
-router.delete('/delete-book', (req: Request, res: Response) => {
+router.delete('/book', (req: Request, res: Response) => {
     books.deleteBook(req, res);
 });
 
@@ -30,7 +30,7 @@ router.get('/count-book', (req: Request, res: Response) => {
 });
 
 // * 
-router.put('/update-book', (req: Request, res: Response) => {
+router.put('/book', (req: Request, res: Response) => {
     books.updateBook(req, res);
 });
 
