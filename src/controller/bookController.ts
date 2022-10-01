@@ -1,35 +1,27 @@
+import { Message } from './../interface/message';
 import { Request, Response } from 'express';
 import fs from 'fs';
-import { Books } from '../interface/books';
 import { Message } from '../interface/message';
+import BookModel from '../model/bookModel';
 
 export class BookController {
   public async getBook(req: Request, res: Response): Promise<any> {
-    let books: any = '';
-    let result: Books;
-    let erro: string = '';
+    let result: any;
+    let erro: any;
 
     try {
-      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
-
       if (req.query.id) {
-        for (const item of books) {
-          if(item.id === Number(req.query.id)){
-            result = item;
-            console.log(result)
-          }
-        }
+        result = await BookModel.find({id: req.query.id});
       } else {
-        result = books;
-        console.log(result)
+        result = await BookModel.find();
       }
 
     } catch (e: any) {
-      erro = e.message;
+      erro = { message: e.message };
       console.log(erro);
     }
 
-    return erro ? res.status(404).send(erro) : res.status(200).send(result!);
+    return erro ? res.status(404).send(erro) : res.status(200).send(result);
   }
 
   public async existBook(req: Request, res: Response): Promise<any> {
@@ -58,25 +50,24 @@ export class BookController {
   }
 
   public async postBook(req: Request, res: Response): Promise<any> {
-    let books: any;
-    let arrayBooks: any = [];
-    let result: Message;
-    let erro: string = '';
+    let result: any;
+    let erro: any;
 
     try {
-      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
-      for (const item of books) {
-        arrayBooks.push(item);
-      }
-      for (const requisicao of req.body) {
-        arrayBooks.push(requisicao);
-      }
-      fs.writeFileSync('books.json', JSON.stringify(arrayBooks), 'utf8');
-      result = { message: `Livro adicionado com sucesso!` };
-    } catch (e: any) {
-      erro = e.message;
+      await BookModel.create({
+        id: req.body.id,
+        titulo: req.body.titulo,
+        autor: req.body.autor,
+        isbn: req.body.isbn,
+        resumo: req.body.resumo,
+        ano_lancamento: req.body.ano_lancamento,
+      });
+      
+      result = { message: `Livro adicionado com sucesso!` }; 
+    }catch (e: any) {
+      erro = { message: e.message };
       console.log(erro);
-    }
+    };
 
     return erro ? res.status(404).send(erro) : res.status(201).send(result!);
   }
@@ -112,34 +103,14 @@ export class BookController {
   }
 
   public async updateBook(req: Request, res: Response) {
-    let books: any;
-    let arrayBooks: any = [];
     let result: Message;
-    let erro: string = '';
+    let erro: any;
 
     try {
-      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
-
-      for (const item of books) {
-        arrayBooks.push(item);
-      }
-
-      for (const item of books) {
-        if (item.id == req.body.id) {
-          item.id = req.body.id,
-          item.titulo = req.body.titulo,
-          item.autor = req.body.autor,
-          item.isbn = req.body.isbn,
-          item.resumo = req.body.resumo,
-          item.ano_lancamento = req.body.ano_lancamento
-          break;
-        }
-      }
-
-      fs.writeFileSync('books.json', JSON.stringify(arrayBooks), 'utf8');
+      await BookModel.findByIdAndUpdate(req.body.id, {$set: req.body});
       result = { message: 'Livro atualizado com sucesso!' };
     } catch (e: any) {
-      erro = e.message;
+      erro = { message: e.message };
       console.log(erro);
     }
 
@@ -147,15 +118,12 @@ export class BookController {
   }
   
   public async countBook(req: Request, res: Response): Promise<any> {
-    let books: any;
     let result: Message;
     let erro: string = '';
 
     try {
-      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
-      result = { message: `Existem ${books.length} livros cadastrados` };
-      console.log(result);
-      
+      let contador = await BookModel.count()
+      result = { message: `Existem ${contador} livros cadastrados` };
     } catch (e: any) {
       erro = e.message;
       console.log(erro);
@@ -164,7 +132,7 @@ export class BookController {
     return erro ? res.status(404).send(erro) : res.status(200).send(result!);
   }
 
-  private removeItem = (array: any[], key: string , value: Number) => {
+  private removeItem(array: any[], key: string , value: Number) {
     return array.filter((elemento) => {
       return elemento[key] !== value
     })

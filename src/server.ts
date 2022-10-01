@@ -11,6 +11,7 @@ conn.on('error', (err: any) =>{
   console.log(err);
 });
 conn.on('open', () => {
+  console.clear();
   console.log('Connected to database 🚀');
   app.emit('open');
 });
