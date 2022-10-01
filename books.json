@@ -7,7 +7,7 @@
   "ano_lancamento": 2006
 }, {
   "id": 3,
-  "titulo": "Node Js",
+  "titulo": "JavaScript",
   "autor": "José",
   "isbn": 56746,
   "resumo": "Aprenda do básico ao avançado",
@@ -24,6 +24,13 @@
   "titulo": "A Arte da Guerra",
   "autor": " Sun Tzu",
   "isbn": 6556600490,
+  "resumo": "Escrito há mais de 2.500 anos, o texto ultrapassa seu contexto militar e apresenta lições fundamentais para o crescimento interior e profissional...",
+  "ano_lancamento": 2001
+}, {
+  "id": 8,
+  "titulo": "teste",
+  "autor": "teste",
+  "isbn": 324343244234,
   "resumo": "Escrito há mais de 2.500 anos, o texto ultrapassa seu contexto militar e apresenta lições fundamentais para o crescimento interior e profissional...",
   "ano_lancamento": 2001
 }]
