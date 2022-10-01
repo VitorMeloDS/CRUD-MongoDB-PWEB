@@ -1,7 +1,6 @@
 import { Message } from './../interface/message';
 import { Request, Response } from 'express';
 import fs from 'fs';
-import { Message } from '../interface/message';
 import BookModel from '../model/bookModel';
 
 export class BookController {
@@ -72,28 +71,20 @@ export class BookController {
     return erro ? res.status(404).send(erro) : res.status(201).send(result!);
   }
 
-  public async deleteBook(req: Request, res: Response): Promise<any> {
-    let books: any = '';
+  public async deleteBook(req: Request, res: Response): Promise<any> { 
+    let consulta: any;
     let result: Message;
     let erro: string = '';
-    let index: number = 0;
+    
 
     try {
-      books = JSON.parse(fs.readFileSync('books.json', 'utf8'));
-      
-      for (const item of books) {
-        if (item.id == Number(req.query.id)) {
-          books = this.removeItem(books, 'id', Number(req.query.id))
-          result = { message: `O livro ${req.query.id} foi removido` }
-          break
-        } else {
-          result = { message: `O livro ${req.query.id} não foi encontrado` }
-        }
-        index++
+      consulta = await BookModel.find({id: req.query.id})
+      if (consulta?.length > 0) {
+        await BookModel.findByIdAndDelete(consulta[0]._id)
+        result = { message: `O livro ${req.query.id} foi deletado` };       
+      } else {
+        result = { message: `O livro ${req.query.id} não existe` };               
       }
-      
-      fs.writeFileSync('books.json', JSON.stringify(books), 'utf8')
-
     } catch (e: any) {
       erro = e.message;
       console.log(erro);
