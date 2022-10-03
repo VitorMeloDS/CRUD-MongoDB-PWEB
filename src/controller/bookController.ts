@@ -1,9 +1,9 @@
 import { Message } from './../interface/message';
 import { Request, Response } from 'express';
-import fs from 'fs';
 import BookModel from '../model/bookModel';
+import { CreateBookController } from './createBookController';
 
-export class BookController {
+export class BookController extends CreateBookController {
   public async getBook(req: Request, res: Response): Promise<any> {
     let result: any;
     let erro: any;
@@ -14,7 +14,6 @@ export class BookController {
       } else {
         result = await BookModel.find();
       }
-
     } catch (e: any) {
       erro = { message: e.message };
       console.log(erro);
@@ -39,7 +38,6 @@ export class BookController {
           result = { message: `O livro número ${req.query.id} não existe`};
         }
       }
-     
     } catch (e: any) {
       erro = e.message;
       console.log(erro);
@@ -53,15 +51,13 @@ export class BookController {
     let erro: any;
 
     try {
-      await BookModel.create({
-        id: req.body.id,
-        titulo: req.body.titulo,
-        autor: req.body.autor,
-        isbn: req.body.isbn,
-        resumo: req.body.resumo,
-        ano_lancamento: req.body.ano_lancamento
-      });
-      
+      if (req.body.length > 0) {
+        for (const book of req.body) {
+          await this.create(book);
+        }
+      } else {
+        await this.create(req.body);
+      }
       result = { message: `Livro adicionado com sucesso!` }; 
     }catch (e: any) {
       erro = { message: e.message };
@@ -76,7 +72,6 @@ export class BookController {
     let result: Message;
     let erro: string = '';
     
-
     try {
       consulta = await BookModel.find({id: req.query.id})
       if (consulta?.length > 0) {
@@ -93,7 +88,7 @@ export class BookController {
     return erro ? res.status(404).send(erro) : res.status(200).send(result!);
   }
 
-  public async updateBook(req: Request, res: Response) {
+  public async updateBook(req: Request, res: Response): Promise<any> {
     let result: Message;
     let erro: any;
 
@@ -126,12 +121,6 @@ export class BookController {
     }
 
     return erro ? res.status(404).send(erro) : res.status(200).send(result!);
-  }
-
-  private removeItem(array: any[], key: string , value: Number) {
-    return array.filter((elemento) => {
-      return elemento[key] !== value
-    })
   }
 }
 
