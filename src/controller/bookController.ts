@@ -11,6 +11,9 @@ export class BookController extends CreateBookController {
     try {
       if (req.query.id) {
         result = await BookModel.find({id: req.query.id});
+        if (result.length == 0) {
+          throw new Error(`O livro número ${req.query.id} não existe`);
+        }
       } else {
         result = await BookModel.find();
       }
